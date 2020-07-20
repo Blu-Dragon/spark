@@ -510,8 +510,7 @@ class StandaloneDynamicAllocationSuite
 
     val taskScheduler = mock(classOf[TaskSchedulerImpl])
     when(taskScheduler.nodeBlacklist()).thenReturn(Set("blacklisted-host"))
-    when(taskScheduler.resourceOffers(any())).thenReturn(Nil)
-    when(taskScheduler.resourcesReqsPerTask).thenReturn(Seq.empty)
+    when(taskScheduler.resourceOffers(any(), any[Boolean])).thenReturn(Nil)
     when(taskScheduler.sc).thenReturn(sc)
 
     val rpcEnv = RpcEnv.create("test-rpcenv", "localhost", 0, conf, securityManager)
@@ -546,7 +545,7 @@ class StandaloneDynamicAllocationSuite
       // will not timeout anything related to executors.
       .set(config.Network.NETWORK_TIMEOUT.key, "2h")
       .set(config.EXECUTOR_HEARTBEAT_INTERVAL.key, "1h")
-      .set(config.STORAGE_BLOCKMANAGER_SLAVE_TIMEOUT.key, "1h")
+      .set(config.STORAGE_BLOCKMANAGER_HEARTBEAT_TIMEOUT.key, "1h")
   }
 
   /** Make a master to which our application will send executor requests. */
